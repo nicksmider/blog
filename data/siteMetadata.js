@@ -1,7 +1,7 @@
 const siteMetadata = {
   title: "Nick Smider's Dev Blog",
   author: 'Nick Smider',
-  headerTitle: "Nick Smider's Dev Blog",
+  headerTitle: "Nick's Dev Blog",
   description:
     'A blog created with Next.js and Tailwind.css. Highlighting some stuff I come across over time.',
   language: 'en-us',
