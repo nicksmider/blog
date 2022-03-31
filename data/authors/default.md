@@ -1,12 +1,12 @@
 ---
-name: Tails Azimuth
-avatar: /static/images/avatar.png
-occupation: Professor of Atmospheric Science
-company: Stanford University
-email: address@yoursite.com
-twitter: https://twitter.com/Twitter
-linkedin: https://www.linkedin.com
-github: https://github.com
+name: Nick Smider
+avatar: /static/images/nick.jpeg
+occupation: Full Stack Software Engineer
+company: null
+email: nick@smider.dev
+twitter: null
+linkedin: https://www.linkedin.com/in/nicholas-smider/
+github: https://github.com/nicksmider
 ---
 
 Tails Azimuth is a professor of atmospheric sciences at the Stanford AI Lab. His research interests includes complexity modelling of tailwinds, headwinds and crosswinds.
