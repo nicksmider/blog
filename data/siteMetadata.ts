@@ -29,7 +29,7 @@ const siteMetadata = {
     // content security policy in the `next.config.js` file.
     // Select a provider and use the environment variables associated to it
     // https://vercel.com/docs/environment-variables
-    provider: 'giscus', // supported providers: giscus, utterances, disqus
+    provider: '', // supported providers: giscus, utterances, disqus
     giscusConfig: {
       // Visit the link below, and follow the steps in the 'configuration' section
       // https://giscus.app/
@@ -49,7 +49,7 @@ const siteMetadata = {
       // Choose the language giscus will be displayed in. options: en, es, zh-CN, zh-TW, ko, ja etc
       lang: 'en',
       // theme when dark mode
-      darkTheme: 'transparent_dark',
+      darkTheme: 'light',
       // If the theme option above is set to 'custom`
       // please provide a link below to your custom theme css file.
       // example: https://giscus.app/themes/custom_example.css
@@ -58,4 +58,4 @@ const siteMetadata = {
   },
 }
 
-module.exports = siteMetadata
+export default siteMetadata
