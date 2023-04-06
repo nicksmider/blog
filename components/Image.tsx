@@ -6,6 +6,6 @@ const imageLoader = ({ src }) => {
   return `${prefix}${src}`
 }
 // eslint-disable-next-line jsx-a11y/alt-text
-const Image = ({ ...rest }) => <NextImage loader={imageLoader} {...rest} />
+const Image = ({ src, ...rest }) => <NextImage src={src} loader={imageLoader} {...rest} />
 
 export default Image

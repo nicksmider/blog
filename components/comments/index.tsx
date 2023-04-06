@@ -6,7 +6,7 @@ const GiscusComponent = dynamic(
     return import('@/components/comments/Giscus')
   },
   { ssr: false }
-)
+) as any // TODO
 
 const Comments = ({ frontMatter }) => {
   let term
