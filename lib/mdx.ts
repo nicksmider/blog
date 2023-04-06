@@ -101,6 +101,7 @@ export async function getFileBySlug(type, slug) {
       readingTime: readingTime(code),
       slug: slug || null,
       fileName: fs.existsSync(mdxPath) ? `${slug}.mdx` : `${slug}.md`,
+      authors: frontmatter.authors,
       ...frontmatter,
       date: frontmatter.date ? new Date(frontmatter.date).toISOString() : null,
     },
