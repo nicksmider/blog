@@ -10,7 +10,8 @@
     "preview": "astro preview",
     "check": "astro check",
     "lint": "biome check src/",
-    "format": "biome format --write src/"
+    "format": "biome format --write src/",
+    "new-post": "node scripts/new-post.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.0.0",
