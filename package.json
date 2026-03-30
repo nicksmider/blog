@@ -30,5 +30,10 @@
     "@astrojs/check": "^0.9.8",
     "@biomejs/biome": "^2.4.9",
     "typescript": "^5.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "yaml@>=2.0.0 <2.8.3": ">=2.8.3"
+    }
   }
 }
