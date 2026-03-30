@@ -1,0 +1,53 @@
+---
+import { getCollection } from 'astro:content'
+import Base from '@/layouts/Base.astro'
+import PostCard from '@/components/PostCard.astro'
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft)
+
+  const tags = [...new Set(posts.flatMap((p) => p.data.tags))]
+
+  return tags.map((tag) => ({
+    params: { tag },
+    props: {
+      tag,
+      posts: posts
+        .filter((p) => p.data.tags.includes(tag))
+        .sort((a, b) => b.data.date.getTime() - a.data.date.getTime()),
+    },
+  }))
+}
+
+const { tag, posts } = Astro.props
+---
+
+<Base title={`#${tag}`}>
+  <div class="mx-auto max-w-3xl px-4 py-16 sm:px-6">
+    <div class="mb-10">
+      <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-neutral-50 px-3 py-1 font-mono text-xs text-neutral-500 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-400">
+        <span class="h-1.5 w-1.5 rounded-full bg-green-400"></span>
+        ~/smider.dev/tags
+      </div>
+      <div class="flex items-baseline gap-3">
+        <h1 class="text-4xl font-bold tracking-tight text-primary-600 dark:text-primary-400">#{tag}</h1>
+        <span class="font-mono text-sm text-neutral-400 dark:text-neutral-500">
+          {posts.length} {posts.length === 1 ? 'post' : 'posts'}
+        </span>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-3">
+      {posts.map((post) => <PostCard post={post} />)}
+    </div>
+
+    <div class="mt-8">
+      <a
+        href="/tags"
+        class="inline-flex items-center gap-1.5 rounded-lg border border-neutral-200 px-3 py-1.5 text-sm text-neutral-600 transition-colors hover:border-primary-300 hover:text-primary-600 dark:border-neutral-800 dark:text-neutral-400 dark:hover:border-primary-700 dark:hover:text-primary-400"
+      >
+        ← All tags
+      </a>
+    </div>
+  </div>
+</Base>
