@@ -20,7 +20,7 @@ const slug = title
   .trim()
   .replace(/\s+/g, '-');
 
-const date = new Date().toISOString().split('T')[0];
+const date = new Date().toISOString().replace(/\.\d{3}Z$/, '');
 const tagList = tags.split(',').map(t => `'${t.trim()}'`).join(', ');
 const filePath = join(postsDir, `${slug}.mdx`);
 
