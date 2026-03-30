@@ -1,0 +1,44 @@
+---
+import TagList from './TagList.astro'
+import type { CollectionEntry } from 'astro:content'
+
+interface Props {
+  post: CollectionEntry<'blog'>
+}
+
+const { post } = Astro.props
+const { title, date, summary, tags } = post.data
+const slug = post.id.replace(/\.(md|mdx)$/, '')
+
+const formattedDate = date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+})
+---
+
+<article class="group relative rounded-xl border border-neutral-200 bg-white p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-200 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/40 dark:hover:border-primary-800/60 dark:hover:bg-neutral-900">
+  <div class="relative z-10 mb-3 flex items-center gap-2.5">
+    <time
+      datetime={date.toISOString()}
+      class="font-mono text-xs text-neutral-400 dark:text-neutral-500"
+    >
+      {formattedDate}
+    </time>
+    {tags.length > 0 && (
+      <>
+        <span class="text-neutral-200 dark:text-neutral-700">·</span>
+        <TagList tags={tags} />
+      </>
+    )}
+  </div>
+  <h2 class="text-base font-semibold text-neutral-900 transition-colors group-hover:text-primary-600 dark:text-neutral-100 dark:group-hover:text-primary-400">
+    <a href={`/blog/${slug}`} class="after:absolute after:inset-0">
+      {title}
+      <span class="ml-1 opacity-0 transition-opacity group-hover:opacity-100">→</span>
+    </a>
+  </h2>
+  {summary && (
+    <p class="mt-1.5 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">{summary}</p>
+  )}
+</article>

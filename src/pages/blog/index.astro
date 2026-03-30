@@ -1,0 +1,151 @@
+---
+import { getCollection } from 'astro:content'
+import Base from '@/layouts/Base.astro'
+import PostCard from '@/components/PostCard.astro'
+
+const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+
+const totalPosts = allPosts.length
+const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags))].sort()
+const years = [...new Set(allPosts.map((p) => p.data.date.getFullYear()))].sort((a, b) => b - a)
+const firstYear = Math.min(...allPosts.map((p) => p.data.date.getFullYear()))
+
+const postsByYear = years.map((year) => ({
+  year,
+  posts: allPosts.filter((p) => p.data.date.getFullYear() === year),
+}))
+---
+
+<Base title="Blog">
+  <div class="mx-auto max-w-3xl px-4 py-16 sm:px-6">
+
+    <!-- Header -->
+    <div class="mb-10">
+      <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-neutral-50 px-3 py-1 font-mono text-xs text-neutral-500 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-400">
+        <span class="h-1.5 w-1.5 rounded-full bg-green-400"></span>
+        ~/smider.dev/blog
+      </div>
+      <h1 class="mb-4 text-4xl font-bold tracking-tight">Blog</h1>
+      <div class="flex flex-wrap gap-x-6 gap-y-1 font-mono text-sm text-neutral-500 dark:text-neutral-400">
+        <span><span class="font-semibold text-neutral-900 dark:text-neutral-100">{totalPosts}</span> posts</span>
+        <span><span class="font-semibold text-neutral-900 dark:text-neutral-100">{allTags.length}</span> tags</span>
+        <span>since <span class="font-semibold text-neutral-900 dark:text-neutral-100">{firstYear}</span></span>
+      </div>
+    </div>
+
+    <!-- Search -->
+    <div class="relative mb-6">
+      <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center font-mono text-sm text-neutral-400 dark:text-neutral-500">❯</span>
+      <input
+        id="search"
+        type="text"
+        placeholder="search posts..."
+        autocomplete="off"
+        class="w-full rounded-lg border border-neutral-200 bg-white py-2.5 pl-8 pr-4 font-mono text-sm text-neutral-900 placeholder-neutral-400 outline-none transition-colors focus:border-primary-400 focus:ring-2 focus:ring-primary-100 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-100 dark:placeholder-neutral-600 dark:focus:border-primary-600 dark:focus:ring-primary-900/30"
+      />
+    </div>
+
+    <!-- Tag filters -->
+    {allTags.length > 0 && (
+      <div class="mb-10 flex flex-wrap gap-2" id="tag-filters">
+        <button
+          data-filter="all"
+          data-active
+          class="rounded-full border border-neutral-200 px-3 py-1 font-mono text-xs text-neutral-500 transition-colors hover:border-primary-400 hover:text-primary-600 dark:border-neutral-700 dark:text-neutral-400"
+        >
+          all
+        </button>
+        {allTags.map((tag) => (
+          <button
+            data-filter={tag}
+            class="rounded-full border border-neutral-200 px-3 py-1 font-mono text-xs text-neutral-500 transition-colors hover:border-primary-400 hover:text-primary-600 dark:border-neutral-700 dark:text-neutral-400"
+          >
+            #{tag}
+          </button>
+        ))}
+      </div>
+    )}
+
+    <!-- Posts by year -->
+    <div id="post-list" class="space-y-10">
+      {postsByYear.map(({ year, posts }) => (
+        <section data-year={year}>
+          <div class="mb-4 font-mono text-xs text-neutral-400 dark:text-neutral-500">// {year}</div>
+          <div class="flex flex-col gap-3">
+            {posts.map((post) => (
+              <div
+                data-tags={post.data.tags.join(',')}
+                data-title={post.data.title.toLowerCase()}
+                data-summary={(post.data.summary ?? '').toLowerCase()}
+              >
+                <PostCard post={post} />
+              </div>
+            ))}
+          </div>
+        </section>
+      ))}
+
+      {totalPosts === 0 && (
+        <p class="text-sm text-neutral-500">No posts yet.</p>
+      )}
+
+      <p id="no-results" class="hidden text-sm text-neutral-500">No posts match your search.</p>
+    </div>
+  </div>
+</Base>
+
+<script>
+  const filterBtns = document.querySelectorAll<HTMLButtonElement>('[data-filter]')
+  const searchInput = document.getElementById('search') as HTMLInputElement
+  const noResults = document.getElementById('no-results') as HTMLElement
+
+  let activeTag = 'all'
+  let searchQuery = ''
+
+  function update() {
+    let anyVisible = false
+
+    document.querySelectorAll<HTMLElement>('[data-tags]').forEach((el) => {
+      const tags = el.dataset.tags?.split(',').filter(Boolean) ?? []
+      const title = el.dataset.title ?? ''
+      const summary = el.dataset.summary ?? ''
+
+      const tagMatch = activeTag === 'all' || tags.includes(activeTag)
+      const searchMatch = searchQuery === '' || title.includes(searchQuery) || summary.includes(searchQuery)
+      const visible = tagMatch && searchMatch
+
+      el.style.display = visible ? '' : 'none'
+      if (visible) anyVisible = true
+    })
+
+    // Hide year sections with no visible posts
+    document.querySelectorAll<HTMLElement>('[data-year]').forEach((section) => {
+      const hasVisible = [...section.querySelectorAll<HTMLElement>('[data-tags]')].some(
+        (el) => el.style.display !== 'none'
+      )
+      section.style.display = hasVisible ? '' : 'none'
+    })
+
+    noResults.classList.toggle('hidden', anyVisible)
+  }
+
+  filterBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      activeTag = btn.dataset.filter ?? 'all'
+      filterBtns.forEach((b) => {
+        if (b.dataset.filter === activeTag) {
+          b.dataset.active = ''
+        } else {
+          delete b.dataset.active
+        }
+      })
+      update()
+    })
+  })
+
+  searchInput.addEventListener('input', () => {
+    searchQuery = searchInput.value.toLowerCase().trim()
+    update()
+  })
+</script>
