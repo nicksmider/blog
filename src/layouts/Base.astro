@@ -38,7 +38,7 @@ const canonicalURL = new URL(Astro.url.pathname, SITE.url)
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
-    {image && <meta property="og:image" content={new URL(image, SITE.url)} />}
+    <meta property="og:image" content={new URL(image ?? '/og-default.png', SITE.url)} />
 
     <!-- RSS -->
     <link

@@ -104,6 +104,14 @@ const readingTime = Math.max(1, Math.ceil(wordCount / 200))
   window.addEventListener('scroll', updateProgress, { passive: true })
   updateProgress()
 
+  // Polaroid image frames
+  document.querySelectorAll<HTMLImageElement>('#post-content img').forEach((img) => {
+    const frame = document.createElement('div')
+    frame.className = 'image-frame'
+    img.parentNode!.insertBefore(frame, img)
+    frame.appendChild(img)
+  })
+
   // Terminal window code blocks
   document.querySelectorAll<HTMLPreElement>('#post-content pre').forEach((pre) => {
     const lang = pre.getAttribute('data-language') ?? ''
