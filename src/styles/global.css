@@ -42,12 +42,6 @@
   color: var(--color-primary-300);
 }
 
-/* KaTeX display math overflow */
-.katex-display {
-  overflow-x: auto;
-  overflow-y: hidden;
-}
-
 /* Shiki — always use dark theme for terminal look */
 .astro-code {
   background-color: var(--shiki-dark-bg) !important;

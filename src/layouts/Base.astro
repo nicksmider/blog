@@ -8,14 +8,12 @@ interface Props {
   title?: string
   description?: string
   image?: string
-  math?: boolean
 }
 
 const {
   title,
   description = SITE.description,
   image,
-  math = false,
 } = Astro.props
 
 const pageTitle = title ? `${title} — ${SITE.title}` : SITE.title
@@ -50,15 +48,6 @@ const canonicalURL = new URL(Astro.url.pathname, SITE.url)
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-
-    <!-- KaTeX (only loaded when post uses math) -->
-    {math && (
-      <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
-        crossorigin="anonymous"
-      />
-    )}
 
     <!-- GoatCounter analytics -->
     <script is:inline data-goatcounter="https://smidges.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
