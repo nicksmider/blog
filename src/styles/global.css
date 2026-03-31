@@ -42,12 +42,6 @@
   color: var(--color-primary-300);
 }
 
-/* KaTeX display math overflow */
-.katex-display {
-  overflow-x: auto;
-  overflow-y: hidden;
-}
-
 /* Shiki — always use dark theme for terminal look */
 .astro-code {
   background-color: var(--shiki-dark-bg) !important;
@@ -113,4 +107,27 @@
 
 .code-copy-btn:hover {
   color: #d1d5db;
+}
+
+/* Polaroid image frame */
+.image-frame {
+  margin: 2rem auto;
+  max-width: 28rem;
+  background: #fff;
+  padding: 0.75rem 0.75rem 2.5rem;
+  border-radius: 0.125rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  transform: rotate(-1deg);
+}
+
+:where(.dark, .dark *) .image-frame {
+  background: #e8e5e0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.image-frame img {
+  display: block;
+  width: 100%;
+  margin: 0;
+  border-radius: 0;
 }
